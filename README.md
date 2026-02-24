@@ -2,24 +2,26 @@
 
 # @azu/eslint-plugin-panda-oxc
 
-Fork of [chakra-ui/eslint-plugin-panda](https://github.com/chakra-ui/eslint-plugin-panda). Adds oxlint-compatible rule
-implementations alongside the original ESLint plugin.
-
-## Fork Changes
-
-- Package name: `@pandacss/eslint-plugin` → `@azu/eslint-plugin-panda-oxc`
-- Added oxlint-compatible rules under `plugin/src/oxlint/`
-- oxlint rules load data via pre-generated `panda-data.json`, removing the synckit worker dependency
-- Exported via `./oxlint` subpath
-- Tests reuse the same ESLint test cases for oxlint rules via vitest `resolve.alias` import swapping
+Fork of [chakra-ui/eslint-plugin-panda](https://github.com/chakra-ui/eslint-plugin-panda). Provides oxlint-compatible
+Panda CSS rule implementations as a drop-in replacement for `@pandacss/eslint-plugin`.
 
 ## Getting Started
 
 ### Installation
 
+Install as an alias of `@pandacss/eslint-plugin`:
+
 ```bash
-pnpm add -D @pandacss/eslint-plugin
+pnpm add -D @pandacss/eslint-plugin@npm:@azu/eslint-plugin-panda-oxc
 ```
+
+npm:
+
+```bash
+npm install -D @pandacss/eslint-plugin@npm:@azu/eslint-plugin-panda-oxc
+```
+
+Existing ESLint configs using `@pandacss/eslint-plugin` work without changes.
 
 ### Usage
 
@@ -42,31 +44,7 @@ Then configure the rules you want to use under the rules section.
 }
 ```
 
-You can also enable the `recommended` rules in extends:
-
-```diff
-{
--   "plugins": ["@pandacss"]
-+   "extends": ["plugin:@pandacss/recommended"]
-}
-```
-
-Or enable all rules in extends:
-
-```diff
-{
--   "plugins": ["@pandacss"]
-+   "extends": ["plugin:@pandacss/all"]
-}
-```
-
-> [!WARNING]  
-> This is not recommended. You should only enable the rules you need.
-
 ### Flat Config
-
-If you use [the flat config format](https://eslint.org/docs/latest/use/configure/configuration-files), you can import
-the plugin and rules from `@pandacss/eslint-plugin` and put it into your config.
 
 ```js filename="eslint.config.mjs"
 import typescriptParser from '@typescript-eslint/parser'
@@ -83,18 +61,16 @@ export default [
       parser: typescriptParser,
     },
     rules: {
-      // Configure rules here
       '@pandacss/no-debug': 'error',
-      // You can also use the recommended rules
-      ...panda.configs.recommended.rules,
-      // Or all rules
-      ...panda.configs.all.rules,
     },
   },
 ]
 ```
 
-You can see an example using `typescript-eslint` at [sandbox/v9/eslint.config.mjs](./sandbox/v9/eslint.config.mjs).
+### panda-data.json
+
+oxlint rules load Panda CSS token data from `panda-data.json`, which is automatically generated on first lint run from
+your panda config.
 
 ## Rules
 
@@ -123,40 +99,3 @@ Where rules are included in the configs `recommended`, or `all` it is indicated 
 | [`@pandacss/prefer-atomic-properties`](docs/rules/prefer-atomic-properties.md) ⚙️        |               |
 | [`@pandacss/prefer-composite-properties`](docs/rules/prefer-composite-properties.md) ⚙️  |               |
 | [`@pandacss/prefer-unified-property-style`](docs/rules/prefer-unified-property-style.md) |               |
-
-## Settings
-
-### `configPath`
-
-You can tell `eslint` to use a custom panda config file by setting the `configPath` option in your `.eslintrc.js` file.
-
-By default we find the nearest panda config to the linted file.
-
-```js filename=".eslintrc.(c)js"
-const path = require('path')
-
-module.exports = {
-  plugins: ['@pandacss'],
-  settings: {
-    '@pandacss/configPath': path.join('PATH-TO/panda.config.js'),
-  },
-}
-```
-
-#### Flat Config
-
-```js filename="eslint.config.mjs"
-import panda from '@pandacss/eslint-plugin'
-import path from 'node:path'
-
-export default [
-  {
-    plugins: {
-      '@pandacss': panda,
-    },
-    settings: {
-      '@pandacss/configPath': path.join('PATH-TO/panda.config.js'),
-    },
-  },
-]
-```

@@ -3,24 +3,15 @@
   "version": "0.3.1",
   "description": "Eslint plugin for Panda CSS",
   "author": "Abraham Aremu <anubra266@gmail.com>",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "dist/oxlint.js",
+  "module": "dist/oxlint.mjs",
+  "types": "dist/oxlint.d.ts",
   "sideEffects": false,
   "publishConfig": {
     "access": "public"
   },
   "exports": {
     ".": {
-      "source": "./src/index.ts",
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "import": {
-        "types": "./dist/index.d.mts",
-        "default": "./dist/index.mjs"
-      }
-    },
-    "./oxlint": {
       "source": "./src/oxlint.ts",
       "types": "./dist/oxlint.d.ts",
       "require": "./dist/oxlint.js",
@@ -46,12 +37,10 @@
     "@pandacss/generator": "^0.53.2",
     "@pandacss/node": "^0.53.2",
     "@pandacss/shared": "^0.53.2",
-    "@types/proper-lockfile": "^4.1.4",
     "@typescript-eslint/scope-manager": "^8.56.0",
     "@typescript-eslint/utils": "^8.21.0",
     "hookable": "^5.5.3",
     "micromatch": "^4.0.8",
-    "proper-lockfile": "^4.1.2",
     "synckit": "^0.9.0"
   },
   "peerDependencies": {

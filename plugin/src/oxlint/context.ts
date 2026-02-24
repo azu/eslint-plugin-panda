@@ -1,7 +1,7 @@
-import { execSync, spawnSync } from 'node:child_process'
+import { execSync } from 'node:child_process'
 import fs from 'node:fs'
+import os from 'node:os'
 import path from 'node:path'
-import { lockSync } from 'proper-lockfile'
 
 export type ImportResult = {
   name: string
@@ -58,55 +58,30 @@ export type PandaData = {
 }
 
 let cached: PandaData | undefined
+let generatedJsonPath: string | undefined
 
-function resolveJsonPath(configPath: string): string {
-  const dir = path.dirname(configPath)
-  return path.resolve(dir, 'panda-data.json')
+function generateData(configPath: string): string {
+  const jsonPath = path.join(os.tmpdir(), `panda-data-${process.pid}.json`)
+
+  const generateScript = path.resolve(__dirname, 'generate-data.mjs')
+  const script = fs.existsSync(generateScript) ? generateScript : path.resolve(__dirname, 'generate-data.js')
+  execSync(`node ${script} ${configPath} ${jsonPath}`, {
+    stdio: 'inherit',
+    cwd: path.dirname(configPath),
+  })
+
+  generatedJsonPath = jsonPath
+  process.on('exit', cleanup)
+
+  return jsonPath
 }
 
-function waitForFile(filePath: string, timeoutMs: number): void {
-  const start = Date.now()
-  while (!fs.existsSync(filePath)) {
-    if (Date.now() - start > timeoutMs) {
-      throw new Error(`Timed out waiting for ${filePath} to be generated`)
-    }
-    spawnSync('sleep', ['0.1'])
-  }
-}
-
-function generateDataIfNeeded(configPath: string, jsonPath: string): void {
-  if (fs.existsSync(jsonPath)) return
-
-  // Lock on configPath (always exists) to prevent parallel generation
-  let release: (() => void) | undefined
-  try {
-    release = lockSync(configPath, { stale: 30000 })
-  } catch {
-    // Lock acquisition failed — another process is generating. Wait for it.
-    waitForFile(jsonPath, 30000)
-    return
-  }
-
-  try {
-    // Double-check after acquiring lock
-    if (fs.existsSync(jsonPath)) return
-
-    const generateScript = path.resolve(__dirname, 'generate-data.mjs')
-    // Fallback to CJS version if ESM version doesn't exist
-    const script = fs.existsSync(generateScript) ? generateScript : path.resolve(__dirname, 'generate-data.js')
-    const tmpPath = jsonPath + '.tmp'
-    execSync(`node ${script} ${configPath} ${tmpPath}`, {
-      stdio: 'inherit',
-      cwd: path.dirname(configPath),
-    })
-    fs.renameSync(tmpPath, jsonPath)
-  } finally {
-    if (release) {
-      try {
-        release()
-      } catch {
-        // lock already released
-      }
+function cleanup(): void {
+  if (generatedJsonPath) {
+    try {
+      fs.unlinkSync(generatedJsonPath)
+    } catch {
+      // already removed
     }
   }
 }
@@ -115,10 +90,9 @@ export function loadPandaData(configPath: string): PandaData {
   if (cached) return cached
 
   const absConfigPath = path.isAbsolute(configPath) ? configPath : path.resolve(process.cwd(), configPath)
-  const resolvedPath = resolveJsonPath(absConfigPath)
-  generateDataIfNeeded(absConfigPath, resolvedPath)
+  const jsonPath = generateData(absConfigPath)
 
-  const raw: PandaDataJSON = JSON.parse(fs.readFileSync(resolvedPath, 'utf-8'))
+  const raw: PandaDataJSON = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'))
 
   // Restore RegExp objects from serialized pathMappings
   const pathMappings: PathMapping[] = (raw.pathMappings ?? []).map((pm) => ({
