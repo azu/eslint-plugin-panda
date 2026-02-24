@@ -5,7 +5,9 @@ import { isIdentifier, isJSXExpressionContainer, isMemberExpression } from '../n
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Context = any
 
-export const noPropertyRenaming = {
+export const RULE_NAME = 'no-property-renaming'
+
+const rule = {
   meta: {
     type: 'problem' as const,
     messages: {
@@ -63,3 +65,5 @@ export const noPropertyRenaming = {
     }
   },
 }
+
+export default rule

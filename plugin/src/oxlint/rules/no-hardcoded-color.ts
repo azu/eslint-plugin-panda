@@ -5,7 +5,9 @@ import { isIdentifier, isJSXExpressionContainer, isJSXIdentifier, isLiteral, isT
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Context = any
 
-export const noHardcodedColor = {
+export const RULE_NAME = 'no-hardcoded-color'
+
+const rule = {
   meta: {
     type: 'problem' as const,
     messages: {
@@ -119,3 +121,5 @@ export const noHardcodedColor = {
     }
   },
 }
+
+export default rule

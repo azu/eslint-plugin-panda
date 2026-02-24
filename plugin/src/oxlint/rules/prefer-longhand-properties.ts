@@ -5,7 +5,9 @@ import { isIdentifier, isJSXIdentifier } from '../nodes'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Context = any
 
-export const preferLonghandProperties = {
+export const RULE_NAME = 'prefer-longhand-properties'
+
+const rule = {
   meta: {
     type: 'suggestion' as const,
     messages: {
@@ -72,3 +74,5 @@ export const preferLonghandProperties = {
     }
   },
 }
+
+export default rule

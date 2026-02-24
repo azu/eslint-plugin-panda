@@ -29,7 +29,9 @@ const CONFIG_FUNCTIONS = new Set([
   'defineSemanticTokens',
 ])
 
-export const noConfigFunctionInSource = {
+export const RULE_NAME = 'no-config-function-in-source'
+
+const rule = {
   meta: {
     type: 'problem' as const,
     messages: {
@@ -94,3 +96,5 @@ export const noConfigFunctionInSource = {
     }
   },
 }
+
+export default rule

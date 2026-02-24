@@ -6,7 +6,9 @@ import { getArbitraryValue } from '@pandacss/shared'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Context = any
 
-export const noEscapeHatch = {
+export const RULE_NAME = 'no-escape-hatch'
+
+const rule = {
   meta: {
     type: 'problem' as const,
     messages: {
@@ -83,3 +85,5 @@ export const noEscapeHatch = {
     }
   },
 }
+
+export default rule

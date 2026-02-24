@@ -5,7 +5,9 @@ import { isIdentifier, isJSXIdentifier } from '../nodes'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Context = any
 
-export const preferShorthandProperties = {
+export const RULE_NAME = 'prefer-shorthand-properties'
+
+const rule = {
   meta: {
     type: 'suggestion' as const,
     messages: {
@@ -77,3 +79,5 @@ export const preferShorthandProperties = {
     }
   },
 }
+
+export default rule

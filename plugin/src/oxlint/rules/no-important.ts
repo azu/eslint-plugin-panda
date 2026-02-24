@@ -9,7 +9,9 @@ type Context = any
 const exclamationRegex = /\s*!$/
 const importantRegex = /\s*!important\s*$/
 
-export const noImportant = {
+export const RULE_NAME = 'no-important'
+
+const rule = {
   meta: {
     type: 'problem' as const,
     messages: {
@@ -109,3 +111,5 @@ export const noImportant = {
     }
   },
 }
+
+export default rule

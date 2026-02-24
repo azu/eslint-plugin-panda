@@ -6,7 +6,9 @@ import { compositeProperties } from '../../utils/composite-properties'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Context = any
 
-export const preferAtomicProperties = {
+export const RULE_NAME = 'prefer-atomic-properties'
+
+const rule = {
   meta: {
     type: 'suggestion' as const,
     messages: {
@@ -89,3 +91,5 @@ export const preferAtomicProperties = {
     }
   },
 }
+
+export default rule

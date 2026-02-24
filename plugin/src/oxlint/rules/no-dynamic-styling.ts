@@ -12,7 +12,9 @@ import {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Context = any
 
-export const noDynamicStyling = {
+export const RULE_NAME = 'no-dynamic-styling'
+
+const rule = {
   meta: {
     type: 'problem' as const,
     messages: {
@@ -101,3 +103,5 @@ export const noDynamicStyling = {
     }
   },
 }
+
+export default rule

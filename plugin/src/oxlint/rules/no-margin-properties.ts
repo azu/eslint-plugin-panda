@@ -5,7 +5,9 @@ import { isIdentifier, isJSXIdentifier } from '../nodes'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Context = any
 
-export const noMarginProperties = {
+export const RULE_NAME = 'no-margin-properties'
+
+const rule = {
   meta: {
     type: 'suggestion' as const,
     messages: {
@@ -68,3 +70,5 @@ export const noMarginProperties = {
     }
   },
 }
+
+export default rule

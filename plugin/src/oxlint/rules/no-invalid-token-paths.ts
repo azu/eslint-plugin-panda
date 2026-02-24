@@ -20,7 +20,9 @@ function isPandaIsh(name: string, data: Context, fileState: Context): boolean {
   return fileState.pandaImports.some((imp: Context) => imp.alias === name || imp.name === name)
 }
 
-export const noInvalidTokenPaths = {
+export const RULE_NAME = 'no-invalid-token-paths'
+
+const rule = {
   meta: {
     type: 'problem' as const,
     messages: {
@@ -134,3 +136,5 @@ export const noInvalidTokenPaths = {
     }
   },
 }
+
+export default rule

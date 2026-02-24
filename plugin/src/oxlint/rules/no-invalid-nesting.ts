@@ -5,7 +5,9 @@ import { isLiteral, isTemplateLiteral } from '../nodes'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Context = any
 
-export const noInvalidNesting = {
+export const RULE_NAME = 'no-invalid-nesting'
+
+const rule = {
   meta: {
     type: 'problem' as const,
     messages: {
@@ -50,3 +52,5 @@ export const noInvalidNesting = {
     }
   },
 }
+
+export default rule

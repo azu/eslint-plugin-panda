@@ -4,7 +4,9 @@ import { buildFileState, isPandaAttribute, isPandaProp, isRecipeVariant } from '
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Context = any
 
-export const noDebug = {
+export const RULE_NAME = 'no-debug'
+
+const rule = {
   meta: {
     type: 'problem' as const,
     messages: {
@@ -56,3 +58,5 @@ export const noDebug = {
     }
   },
 }
+
+export default rule

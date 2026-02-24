@@ -6,7 +6,9 @@ import { compositeProperties } from '../../utils/composite-properties'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Context = any
 
-export const preferUnifiedPropertyStyle = {
+export const RULE_NAME = 'prefer-unified-property-style'
+
+const rule = {
   meta: {
     type: 'suggestion' as const,
     messages: {
@@ -103,3 +105,5 @@ export const preferUnifiedPropertyStyle = {
     }
   },
 }
+
+export default rule

@@ -5,7 +5,9 @@ import { isImportDeclaration } from '../nodes'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Context = any
 
-export const fileNotIncluded = {
+export const RULE_NAME = 'file-not-included'
+
+const rule = {
   meta: {
     type: 'problem' as const,
     messages: {
@@ -45,3 +47,5 @@ export const fileNotIncluded = {
     }
   },
 }
+
+export default rule

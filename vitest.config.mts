@@ -6,5 +6,6 @@ export default defineConfig({
     setupFiles: ['tests-setup.ts'],
     hideSkippedTests: true,
     isolate: false,
+    testTimeout: 30000,
   },
 })

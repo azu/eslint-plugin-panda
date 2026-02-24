@@ -20,7 +20,9 @@ function isPandaIsh(name: string, data: Context, fileState: Context): boolean {
   return fileState.pandaImports.some((imp: Context) => imp.alias === name || imp.name === name)
 }
 
-export const noDeprecatedTokens = {
+export const RULE_NAME = 'no-deprecated-tokens'
+
+const rule = {
   meta: {
     type: 'problem' as const,
     messages: {
@@ -146,3 +148,5 @@ export const noDeprecatedTokens = {
     }
   },
 }
+
+export default rule

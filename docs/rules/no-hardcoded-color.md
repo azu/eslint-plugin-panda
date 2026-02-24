@@ -59,6 +59,34 @@ import { Circle } from './panda/jsx';
 
 function App(){
   return <Circle _hover={{  borderColor: 'gray.100' }} />;
+};
+```
+```js
+
+import { css } from './panda/css';
+
+const styles = css({ color: 'var(--my-color)' });
+```
+```js
+
+import { css } from './panda/css';
+
+const styles = css({ backgroundColor: 'var(--bg-color)' });
+```
+```js
+
+import { Circle } from './panda/jsx';
+
+function App(){
+  return <Circle borderColor='var(--border-color)' />;
+};
+```
+```js
+
+import { css } from './panda/css';
+
+function App(){
+  return <div className={css({ color: 'var(--text-primary)' })} />;
 }
 ```
 

@@ -13,7 +13,9 @@ import { getArbitraryValue } from '@pandacss/shared'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Context = any
 
-export const noUnsafeTokenFnUsage = {
+export const RULE_NAME = 'no-unsafe-token-fn-usage'
+
+const rule = {
   meta: {
     type: 'suggestion' as const,
     messages: {
@@ -130,3 +132,5 @@ export const noUnsafeTokenFnUsage = {
     }
   },
 }
+
+export default rule

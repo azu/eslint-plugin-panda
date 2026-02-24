@@ -6,7 +6,9 @@ import { physicalProperties, physicalPropertyValues } from '../../utils/physical
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Context = any
 
-export const noPhysicalProperties = {
+export const RULE_NAME = 'no-physical-properties'
+
+const rule = {
   meta: {
     type: 'suggestion' as const,
     messages: {
@@ -139,3 +141,5 @@ export const noPhysicalProperties = {
     }
   },
 }
+
+export default rule
