@@ -1,6 +1,6 @@
 {
   "name": "@azu/eslint-plugin-panda-oxc",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Eslint plugin for Panda CSS",
   "author": "Abraham Aremu <anubra266@gmail.com>",
   "main": "dist/oxlint.js",
