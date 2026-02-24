@@ -7,6 +7,10 @@
   "module": "dist/oxlint.mjs",
   "types": "dist/oxlint.d.ts",
   "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/azu/eslint-plugin-panda-oxc"
+  },
   "publishConfig": {
     "access": "public"
   },
