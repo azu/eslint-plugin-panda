@@ -63,8 +63,8 @@ let generatedJsonPath: string | undefined
 function generateData(configPath: string): string {
   const jsonPath = path.join(os.tmpdir(), `panda-data-${process.pid}.json`)
 
-  const generateScript = path.resolve(__dirname, 'generate-data.mjs')
-  const script = fs.existsSync(generateScript) ? generateScript : path.resolve(__dirname, 'generate-data.js')
+  const generateScript = path.resolve(__dirname, 'oxlint', 'generate-data.mjs')
+  const script = fs.existsSync(generateScript) ? generateScript : path.resolve(__dirname, 'oxlint', 'generate-data.js')
   execSync(`node ${script} ${configPath} ${jsonPath}`, {
     stdio: 'inherit',
     cwd: path.dirname(configPath),
