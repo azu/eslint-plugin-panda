@@ -8,7 +8,7 @@
     "prepare": "husky",
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r --parallel build",
-    "test": "vitest run && vitest run --config vitest.config.oxlint.mts",
+    "test": "pnpm run test:eslint && pnpm run test:oxlint",
     "test:eslint": "vitest run",
     "test:oxlint": "vitest run --config vitest.config.oxlint.mts",
     "docs": "rm -rf docs/rules && pnpm build:docs",
