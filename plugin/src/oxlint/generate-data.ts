@@ -46,8 +46,8 @@ async function main() {
   // Build token paths
   const allTokenPaths: string[] = []
   const deprecatedTokenPaths: string[] = []
-  // @ts-expect-error tokens.view iterable type mismatch across panda versions
-  for (const [tokenPath] of ctx.utility.tokens.view) {
+  // @ts-expect-error tokens.view.values type mismatch across panda versions
+  for (const [tokenPath] of ctx.utility.tokens.view.values) {
     allTokenPaths.push(tokenPath)
     if (ctx.utility.tokens.isDeprecated(tokenPath)) {
       deprecatedTokenPaths.push(tokenPath)
