@@ -66,7 +66,7 @@ function generateData(configPath: string): string {
   const generateScript = path.resolve(__dirname, 'oxlint', 'generate-data.mjs')
   const script = fs.existsSync(generateScript) ? generateScript : path.resolve(__dirname, 'oxlint', 'generate-data.js')
   execSync(`node ${script} ${configPath} ${jsonPath}`, {
-    stdio: 'inherit',
+    stdio: 'pipe',
     cwd: path.dirname(configPath),
   })
 
