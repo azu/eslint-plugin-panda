@@ -115,12 +115,15 @@ const findDeclaration = (name: string, context: RuleContext<any, any>) => {
       return undefined
     }
 
+    // @ts-expect-error Program type mismatch between eslint-scope and @typescript-eslint
     const scope = analyze(src.ast, {
       sourceType: 'module',
     })
     const decl = scope.variables
-      .find((v) => v.name === name)
-      ?.defs.find((d) => isIdentifier(d.name) && d.name.name === name)?.node
+      .find((v: { name: string }) => v.name === name)
+      // @ts-expect-error Definition type mismatch between eslint-scope versions
+      ?.defs.find((d: { name: TSESTree.Node; node: TSESTree.Node }) => isIdentifier(d.name) && d.name.name === name)
+      ?.node as TSESTree.Node | undefined
     if (isVariableDeclarator(decl)) return decl
   } catch (error) {
     console.error('Error in findDeclaration:', error)

@@ -104,7 +104,9 @@ function generateDataIfNeeded(configPath: string, jsonPath: string): void {
     if (release) {
       try {
         release()
-      } catch {}
+      } catch {
+        // lock already released
+      }
     }
   }
 }

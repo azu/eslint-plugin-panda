@@ -38,7 +38,7 @@ async function main() {
   for (const detail of ctx.patterns.details) {
     const props = Object.keys(detail.config.properties ?? {})
     patternProps[detail.baseName] = props
-    for (const jsxName of detail.jsx) {
+    for (const jsxName of detail.jsx as string[]) {
       patternProps[jsxName] = props
     }
   }
@@ -46,6 +46,7 @@ async function main() {
   // Build token paths
   const allTokenPaths: string[] = []
   const deprecatedTokenPaths: string[] = []
+  // @ts-expect-error tokens.view iterable type mismatch across panda versions
   for (const [tokenPath] of ctx.utility.tokens.view) {
     allTokenPaths.push(tokenPath)
     if (ctx.utility.tokens.isDeprecated(tokenPath)) {

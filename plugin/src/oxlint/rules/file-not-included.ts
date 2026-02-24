@@ -1,6 +1,5 @@
 import { loadPandaData } from '../context'
 import { buildFileState, isValidFile } from '../helpers'
-import { matchImport } from '../import-matcher'
 import { isImportDeclaration } from '../nodes'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

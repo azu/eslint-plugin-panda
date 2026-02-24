@@ -36,7 +36,6 @@ export async function getContext(opts: Opts) {
     return ctx
   } else {
     const configPath = findConfig({ cwd: opts.configPath ?? opts.currentFile })
-    const cwd = path.dirname(configPath)
 
     // The context cache ensures we don't reload the same config multiple times
     if (!contextCache[configPath]) {
@@ -192,6 +191,7 @@ export async function runAsync(action: string, opts: Opts, ...args: any): Promis
       // @ts-expect-error cast
       return resolveShorthands(ctx, ...args)
     case 'isValidFile':
+      // @ts-expect-error cast
       return isValidFile(ctx, opts.currentFile)
     case 'isColorAttribute':
       // @ts-expect-error cast
@@ -206,6 +206,7 @@ export async function runAsync(action: string, opts: Opts, ...args: any): Promis
       // @ts-expect-error cast
       return getPropCategory(ctx, ...args)
     case 'getJsxFactory':
+      // @ts-expect-error cast
       return getJsxFactory(ctx)
     case 'filterDeprecatedTokens':
       // @ts-expect-error cast

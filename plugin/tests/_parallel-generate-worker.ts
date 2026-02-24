@@ -56,6 +56,8 @@ try {
   if (release) {
     try {
       release()
-    } catch {}
+    } catch {
+      // lock already released
+    }
   }
 }

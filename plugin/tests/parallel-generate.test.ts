@@ -26,30 +26,24 @@ function runWorker(): Promise<{ code: number | null; stdout: string; stderr: str
   })
 }
 
-describe('parallel panda-data.json generation', () => {
-  beforeEach(() => {
+function cleanup() {
+  for (const p of [jsonPath, jsonPath + '.tmp']) {
     try {
-      fs.unlinkSync(jsonPath)
-    } catch {}
-    try {
-      fs.unlinkSync(jsonPath + '.tmp')
-    } catch {}
-    try {
-      fs.rmdirSync(configPath + '.lock')
-    } catch {}
-  })
+      fs.unlinkSync(p)
+    } catch {
+      // file may not exist
+    }
+  }
+  try {
+    fs.rmdirSync(configPath + '.lock')
+  } catch {
+    // lock dir may not exist
+  }
+}
 
-  afterEach(() => {
-    try {
-      fs.unlinkSync(jsonPath)
-    } catch {}
-    try {
-      fs.unlinkSync(jsonPath + '.tmp')
-    } catch {}
-    try {
-      fs.rmdirSync(configPath + '.lock')
-    } catch {}
-  })
+describe('parallel panda-data.json generation', () => {
+  beforeEach(cleanup)
+  afterEach(cleanup)
 
   it('should generate panda-data.json safely with 4 parallel processes', async () => {
     const WORKERS = 4
