@@ -1,15 +1,15 @@
 # @azu/eslint-plugin-panda-oxc
 
-[chakra-ui/eslint-plugin-panda](https://github.com/chakra-ui/eslint-plugin-panda) の fork。
-ESLint プラグインに加え、oxlint 互換のルール実装を追加している。
+Fork of [chakra-ui/eslint-plugin-panda](https://github.com/chakra-ui/eslint-plugin-panda).
+Adds oxlint-compatible rule implementations alongside the original ESLint plugin.
 
-## Fork の変更点
+## Fork Changes
 
-- パッケージ名: `@pandacss/eslint-plugin` → `@azu/eslint-plugin-panda-oxc`
-- `plugin/src/oxlint/` に oxlint 互換ルールを追加
-- oxlint 版は `panda-data.json`（事前生成）経由でデータを読み込み、synckit worker に依存しない
-- `./oxlint` サブパスでエクスポート
-- テストは vitest の `resolve.alias` で import を差し替え、ESLint 版と同じテストケースを oxlint 版でも実行
+- Package name: `@pandacss/eslint-plugin` → `@azu/eslint-plugin-panda-oxc`
+- Added oxlint-compatible rules under `plugin/src/oxlint/`
+- oxlint rules load data via pre-generated `panda-data.json`, removing the synckit worker dependency
+- Exported via `./oxlint` subpath
+- Tests reuse the same ESLint test cases for oxlint rules via vitest `resolve.alias` import swapping
 
 ## Getting Started
 
