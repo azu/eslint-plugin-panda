@@ -9,46 +9,21 @@ Panda CSS rule implementations as a drop-in replacement for `@pandacss/eslint-pl
 
 ### Installation
 
-Install as an alias of `@pandacss/eslint-plugin`:
-
 ```bash
-pnpm add -D @pandacss/eslint-plugin@npm:@azu/eslint-plugin-panda-oxc
+pnpm add -D @azu/eslint-plugin-panda-oxc
 ```
 
 npm:
 
 ```bash
-npm install -D @pandacss/eslint-plugin@npm:@azu/eslint-plugin-panda-oxc
-```
-
-Existing ESLint configs using `@pandacss/eslint-plugin` work without changes.
-
-### Usage
-
-Add `@pandacss/eslint-plugin` to the plugins section of your `.eslintrc` configuration file. You can omit the
-`/eslint-plugin` suffx:
-
-```json
-{
-  "plugins": ["@pandacss"]
-}
-```
-
-Then configure the rules you want to use under the rules section.
-
-```json
-{
-  "rules": {
-    "@pandacss/no-debug": "error"
-  }
-}
+npm install -D @azu/eslint-plugin-panda-oxc
 ```
 
 ### Flat Config
 
 ```js filename="eslint.config.mjs"
 import typescriptParser from '@typescript-eslint/parser'
-import panda, { createPandaJSON } from '@pandacss/eslint-plugin'
+import panda, { createPandaJSON } from '@azu/eslint-plugin-panda-oxc'
 
 export default [
   {
@@ -75,20 +50,6 @@ export default [
 `createPandaJSON` generates a panda-data JSON file from your Panda CSS config at ESLint config evaluation time and
 returns the file path. Pass the returned path to `@pandacss/configPath` in settings. This avoids spawning subprocesses
 during linting.
-
-You can also pre-generate the JSON file via CLI:
-
-```bash
-node node_modules/@pandacss/eslint-plugin/dist/oxlint/generate-data.mjs panda.config.ts panda-data.json
-```
-
-Then pass the path directly:
-
-```js
-settings: {
-  '@pandacss/configPath': './panda-data.json',
-}
-```
 
 ## Rules
 
