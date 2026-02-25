@@ -27,7 +27,7 @@ Load the plugin via `jsPlugins` and set `@pandacss/configPath` in `settings` to 
 file path. Generate the JSON before running the linter to avoid spawning subprocesses during linting.
 
 ```js
-import path from 'path'
+import path from 'node:path'
 import { createPandaJSON } from '@azu/eslint-plugin-panda-oxc'
 
 const pandaDataPath = await createPandaJSON(path.join(import.meta.dirname, 'panda.config.ts'))
