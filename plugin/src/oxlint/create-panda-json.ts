@@ -92,13 +92,5 @@ export async function createPandaJSON(basedir: string, configRelativePath: strin
   const jsonPath = path.join(os.tmpdir(), `panda-data-${process.pid}.json`)
   fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2))
 
-  process.on('exit', () => {
-    try {
-      fs.unlinkSync(jsonPath)
-    } catch {
-      // already removed
-    }
-  })
-
   return jsonPath
 }
