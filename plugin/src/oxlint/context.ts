@@ -1,6 +1,4 @@
-import { execSync } from 'node:child_process'
 import fs from 'node:fs'
-import os from 'node:os'
 import path from 'node:path'
 
 export type ImportResult = {
@@ -58,41 +56,12 @@ export type PandaData = {
 }
 
 let cached: PandaData | undefined
-let generatedJsonPath: string | undefined
 
-function generateData(configPath: string): string {
-  const jsonPath = path.join(os.tmpdir(), `panda-data-${process.pid}.json`)
-
-  const generateScript = path.resolve(__dirname, 'oxlint', 'generate-data.mjs')
-  const script = fs.existsSync(generateScript) ? generateScript : path.resolve(__dirname, 'oxlint', 'generate-data.js')
-  execSync(`node ${script} ${configPath} ${jsonPath}`, {
-    stdio: 'pipe',
-    cwd: path.dirname(configPath),
-  })
-
-  generatedJsonPath = jsonPath
-  process.on('exit', cleanup)
-
-  return jsonPath
-}
-
-function cleanup(): void {
-  if (generatedJsonPath) {
-    try {
-      fs.unlinkSync(generatedJsonPath)
-    } catch {
-      // already removed
-    }
-  }
-}
-
-export function loadPandaData(configPath: string): PandaData {
+export function loadPandaData(jsonPath: string): PandaData {
   if (cached) return cached
 
-  const absConfigPath = path.isAbsolute(configPath) ? configPath : path.resolve(process.cwd(), configPath)
-  const jsonPath = generateData(absConfigPath)
-
-  const raw: PandaDataJSON = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'))
+  const absJsonPath = path.isAbsolute(jsonPath) ? jsonPath : path.resolve(process.cwd(), jsonPath)
+  const raw: PandaDataJSON = JSON.parse(fs.readFileSync(absJsonPath, 'utf-8'))
 
   // Restore RegExp objects from serialized pathMappings
   const pathMappings: PathMapping[] = (raw.pathMappings ?? []).map((pm) => ({

@@ -1,8 +1,9 @@
 import { RuleTester } from 'eslint'
 import tsParser from '@typescript-eslint/parser'
 import path from 'path'
+import { createPandaJSON } from './src/oxlint/create-panda-json'
 
-const configPath = path.resolve(__dirname, '../sandbox/v9/panda.config.ts')
+const pandaDataPath = await createPandaJSON(__dirname, '../sandbox/v9/panda.config.ts')
 
 const testerConfig = {
   languageOptions: {
@@ -14,7 +15,7 @@ const testerConfig = {
     },
   },
   settings: {
-    '@pandacss/configPath': configPath,
+    '@pandacss/configPath': pandaDataPath,
   },
 }
 
