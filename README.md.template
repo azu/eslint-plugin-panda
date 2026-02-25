@@ -46,7 +46,7 @@ Then configure the rules you want to use under the rules section.
 
 ```js filename="eslint.config.mjs"
 import typescriptParser from '@typescript-eslint/parser'
-import panda from '@pandacss/eslint-plugin'
+import panda, { createPandaJSON } from '@pandacss/eslint-plugin'
 
 export default [
   {
@@ -58,6 +58,12 @@ export default [
     languageOptions: {
       parser: typescriptParser,
     },
+    settings: {
+      '@pandacss/configPath': await createPandaJSON(
+        import.meta.dirname,
+        'panda.config.ts',
+      ),
+    },
     rules: {
       "@pandacss/no-debug": "error",
     },
@@ -67,7 +73,21 @@ export default [
 
 ### panda-data.json
 
-oxlint rules load Panda CSS token data from `panda-data.json`, which is automatically generated on first lint run from your panda config.
+`createPandaJSON` generates a panda-data JSON file from your Panda CSS config at ESLint config evaluation time and returns the file path. Pass the returned path to `@pandacss/configPath` in settings. This avoids spawning subprocesses during linting.
+
+You can also pre-generate the JSON file via CLI:
+
+```bash
+node node_modules/@pandacss/eslint-plugin/dist/oxlint/generate-data.mjs panda.config.ts panda-data.json
+```
+
+Then pass the path directly:
+
+```js
+settings: {
+  '@pandacss/configPath': './panda-data.json',
+}
+```
 
 ## Rules
 
