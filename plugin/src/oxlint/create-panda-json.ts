@@ -78,16 +78,15 @@ export async function buildPandaData(configPath: string) {
 
 /**
  * Generate a panda-data JSON file from a Panda CSS config and return the JSON file path.
- * Use in ESLint flat config:
- * ```
- * settings: {
- *   "@pandacss/configPath": await createPandaJSON(import.meta.dirname, "panda.config.ts"),
- * }
+ *
+ * ```js
+ * import { createPandaJSON } from '@azu/eslint-plugin-panda-oxc'
+ * const pandaDataPath = await createPandaJSON(path.join(import.meta.dirname, 'panda.config.ts'))
  * ```
  */
-export async function createPandaJSON(basedir: string, configRelativePath: string): Promise<string> {
-  const configPath = path.resolve(basedir, configRelativePath)
-  const data = await buildPandaData(configPath)
+export async function createPandaJSON(configPath: string): Promise<string> {
+  const absConfigPath = path.isAbsolute(configPath) ? configPath : path.resolve(process.cwd(), configPath)
+  const data = await buildPandaData(absConfigPath)
 
   const jsonPath = path.join(os.tmpdir(), `panda-data-${process.pid}.json`)
   fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2))
