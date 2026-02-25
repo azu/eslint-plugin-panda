@@ -1,4 +1,5 @@
 import { execSync } from 'node:child_process'
+import crypto from 'node:crypto'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
@@ -57,39 +58,58 @@ export type PandaData = {
   deprecatedTokenPaths: Set<string>
 }
 
-let cached: PandaData | undefined
-let generatedJsonPath: string | undefined
+const cache = new Map<string, PandaData>()
+let cleanupRegistered = false
+
+function configHash(configPath: string): string {
+  return crypto.createHash('md5').update(configPath).digest('hex').slice(0, 8)
+}
 
 function generateData(configPath: string): string {
-  const jsonPath = path.join(os.tmpdir(), `panda-data-${process.pid}.json`)
+  const jsonPath = path.join(os.tmpdir(), `panda-data-${process.pid}-${configHash(configPath)}.json`)
+  if (!fs.existsSync(jsonPath)) {
+    const generateScript = path.resolve(__dirname, 'oxlint', 'generate-data.mjs')
+    const script = fs.existsSync(generateScript)
+      ? generateScript
+      : path.resolve(__dirname, 'oxlint', 'generate-data.js')
+    execSync(`node ${script} ${configPath} ${jsonPath}`, {
+      stdio: 'pipe',
+      cwd: path.dirname(configPath),
+    })
+  }
 
-  const generateScript = path.resolve(__dirname, 'oxlint', 'generate-data.mjs')
-  const script = fs.existsSync(generateScript) ? generateScript : path.resolve(__dirname, 'oxlint', 'generate-data.js')
-  execSync(`node ${script} ${configPath} ${jsonPath}`, {
-    stdio: 'pipe',
-    cwd: path.dirname(configPath),
-  })
-
-  generatedJsonPath = jsonPath
-  process.on('exit', cleanup)
+  if (!cleanupRegistered) {
+    process.on('exit', cleanup)
+    cleanupRegistered = true
+  }
 
   return jsonPath
 }
 
 function cleanup(): void {
-  if (generatedJsonPath) {
-    try {
-      fs.unlinkSync(generatedJsonPath)
-    } catch {
-      // already removed
+  const tmpDir = os.tmpdir()
+  const prefix = `panda-data-${process.pid}-`
+  try {
+    for (const file of fs.readdirSync(tmpDir)) {
+      if (file.startsWith(prefix) && file.endsWith('.json')) {
+        try {
+          fs.unlinkSync(path.join(tmpDir, file))
+        } catch {
+          // already removed
+        }
+      }
     }
+  } catch {
+    // tmpdir read failed
   }
 }
 
 export function loadPandaData(configPath: string): PandaData {
-  if (cached) return cached
-
   const absConfigPath = path.isAbsolute(configPath) ? configPath : path.resolve(process.cwd(), configPath)
+
+  const hit = cache.get(absConfigPath)
+  if (hit) return hit
+
   const jsonPath = generateData(absConfigPath)
 
   const raw: PandaDataJSON = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'))
@@ -100,7 +120,7 @@ export function loadPandaData(configPath: string): PandaData {
     paths: pm.paths,
   }))
 
-  cached = {
+  const data: PandaData = {
     jsxFactory: raw.jsxFactory,
     include: raw.include,
     exclude: raw.exclude,
@@ -116,7 +136,9 @@ export function loadPandaData(configPath: string): PandaData {
     allTokenPaths: new Set(raw.allTokenPaths),
     deprecatedTokenPaths: new Set(raw.deprecatedTokenPaths),
   }
-  return cached
+
+  cache.set(absConfigPath, data)
+  return data
 }
 
 export function isValidProperty(data: PandaData, name: string, patternName?: string): boolean {
